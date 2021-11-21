@@ -1,0 +1,19 @@
+#svg-image-object-container{
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+#svg-image-object{
+    width: 50%;
+    max-width: 100px;
+}
+
+.dark{
+    background: #222;
+}
+
+.light{
+    background: #ddd;
+}

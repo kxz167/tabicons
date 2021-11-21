@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { IconDisplayComponent } from './icon-display/icon-display.component';
 
+import { ColorSketchModule } from 'ngx-color/sketch'; //THIRD PARTY LIBRARY ngx-color
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -12,7 +14,8 @@ import { IconDisplayComponent } from './icon-display/icon-display.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ColorSketchModule
   ],
   providers: [],
   bootstrap: [AppComponent]
