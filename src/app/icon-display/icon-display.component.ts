@@ -11,15 +11,18 @@ const URL_LENGTH = 13;
 })
 export class IconDisplayComponent implements OnInit {
 
+  let iconUrl: string;
+  let oldIcon: HTMLLinkElement = document.querySelector('#favicon');
+
   constructor(
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) { }
 
 
   ngOnInit(): void {
-    console.warn(this.router.url.slice(URL_LENGTH));
-    console.warn(this.route);
+    iconUrl = this.router.url.slice(URL_LENGTH);
+    console.warn(iconUrl);
+    this.oldIcon.data = "/assets/icons" + iconUrl;
   }
 
 }

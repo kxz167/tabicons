@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+/icons
+/src/assets/icons/*
+
 # compiled output
 /dist
 /tmp
