@@ -17,3 +17,8 @@
 .light{
     background: #ddd;
 }
+
+#button-wrapper{
+    display: flex;
+    justify-content: center;
+}

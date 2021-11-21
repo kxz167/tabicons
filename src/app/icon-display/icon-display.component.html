@@ -6,7 +6,9 @@
     <div #svgObjectContainer id="svg-image-object-container">
         <object #svgObject title="svg-embedded" id = "svg-image-object" type="image/svg+xml" data="" (load)="setSvgStyle()" (error)="noImage($event)"></object>
     </div>
-    <button (click)="updateUrl()">Update Url</button>
+    <div id="button-wrapper">
+        <button (click)="updateUrl()">Update Url</button>
+    </div>
     <div id="color-pickers">
         <div id="fill-picker" class="color-picker-item">
             <h3>Fill Color Overrides:</h3>
@@ -15,7 +17,7 @@
         </div>
         <div id="background-picker" class="color-picker-item">
             <h3>Background Color Overrides (For Visualization Purposes):</h3>
-            <color-sketch [color]="'#222'" (onChangeComplete)="setBackground($event)"></color-sketch>
+            <color-sketch [color]="(inDarkMode() ? '#222' : '#ddd' )" (onChangeComplete)="setBackground($event)"></color-sketch>
         </div>
     </div>
 <!-- </div> -->
