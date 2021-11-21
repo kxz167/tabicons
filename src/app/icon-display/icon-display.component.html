@@ -14,7 +14,7 @@
             <color-sketch [color]="(inDarkMode() ? 'white' : 'black')" (onChangeComplete)="changeComplete($event)"></color-sketch>
         </div>
         <div id="background-picker" class="color-picker-item">
-            <h3>Background Color Overrides:</h3>
+            <h3>Background Color Overrides (For Visualization Purposes):</h3>
             <color-sketch [color]="(!inDarkMode() ? 'white' : 'black')" (onChangeComplete)="setBackground($event)"></color-sketch>
         </div>
     </div>

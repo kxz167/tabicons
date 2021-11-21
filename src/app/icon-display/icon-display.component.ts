@@ -105,8 +105,9 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
 
     // console.warn("Init");
     // Find the url that the user "searched" for.
-
-    let regex = new RegExp('(?<=\/icon-display)(.*)(?=\\?)');
+    
+    let regex = new RegExp('(?<=\/icon-display)(.*?)(?=(\\?|$))');
+    // let regex = new RegExp('(?<=\/icon-display)(.*\\?)(?=\\?*)');
     let matches = this.router.url.match(regex);
     if(matches != null){
       this.searchUrl = matches[0];

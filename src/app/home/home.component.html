@@ -1,1 +1,16 @@
-<p>home works!</p>
+<h2>Introduction:</h2>
+<p>Welcome to Tabicons: the fully web sided tab organizer! This simple application is meant to help organize those unwieldly 25+ tabs-in-one-window panic searching us coders tend to do.</p>
+<p>The mix of Microsoft Edge's integration of vertical tabs with Google's Material Icons, gives endless possibilites for organization through tab favicons.</p>
+<h2>Use:</h2>
+<h3>Icon Browsing:</h3>
+<p>At the current time, there is no browse feature built into the website. Instead, please navigate to <a href="https://fonts.google.com/icons" target="_blank">https://fonts.google.com/icons</a>. Here, you will be able to browse all of the icons offered. Additionally, only one style (filled) is supported at the current time.</p>
+<p>On that site at the top, you can search for icons. The "category" drop down will determine the first part of the url, and the name determines the second.</p>
+<p>So the icon under category "image" with name "Add A Photo" can be translated as "/image/add_a_photo"</p>
+<h3>Icon Page:</h3>
+<p>You can go ahead and modify the URL yourself, or I have gone ahead and provided the following simple form to take you directly there.</p>
+<form id="icon-form" [formGroup]="iconForm" (submit)="submit()">
+    <input id="category" type="text" formControlName="category" placeholder="Category"/>
+    <input id="name" type="text" formControlName="name" placeholder="Name"/>
+    <button type="submit">Go!</button>
+</form>
+<h3>Saving:</h3>
