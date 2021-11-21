@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { IconDisplayComponent } from './icon-display/icon-display.component';
 
-import { ColorSketchModule } from 'ngx-color/sketch'; //THIRD PARTY LIBRARY ngx-color
+import { ColorSketchModule } from 'ngx-color/sketch';
+import { HomeComponent } from './home/home.component'; //THIRD PARTY LIBRARY ngx-color
 
 @NgModule({
   declarations: [
     AppComponent,
-    IconDisplayComponent
+    IconDisplayComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

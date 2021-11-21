@@ -91,6 +91,7 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
 
   updateUrl(){
     console.warn(this.stringRgbVal);
+    this.router.navigateByUrl("/icon-display" + this.searchUrl + "?color="+this.stringRgbVal);
   }
 
   ngOnInit(): void {
