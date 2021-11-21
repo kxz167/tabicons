@@ -1,7 +1,7 @@
 <h2>Icon Display Works!</h2>
 <h3>You selected the following url:</h3>
 <p>{{searchUrl}}</p>
-<div *ngIf="!imageFailed">
+<!-- <div *ngIf="!imageFailed"> -->
     <h3>Which produces the following icon:</h3>
     <div #svgObjectContainer id="svg-image-object-container">
         <object #svgObject title="svg-embedded" id = "svg-image-object" type="image/svg+xml" data="" (load)="setSvgStyle()" (error)="noImage($event)"></object>
@@ -11,11 +11,11 @@
         <div id="fill-picker" class="color-picker-item">
             <h3>Fill Color Overrides:</h3>
             <!-- TODO Change this color to represent the inputted value -->
-            <color-sketch [color]="(inDarkMode() ? 'white' : 'black')" (onChangeComplete)="changeComplete($event)"></color-sketch>
+            <color-sketch [color]="getColor(false)" (onChangeComplete)="changeComplete($event)"></color-sketch>
         </div>
         <div id="background-picker" class="color-picker-item">
             <h3>Background Color Overrides (For Visualization Purposes):</h3>
-            <color-sketch [color]="(!inDarkMode() ? 'white' : 'black')" (onChangeComplete)="setBackground($event)"></color-sketch>
+            <color-sketch [color]="'#222'" (onChangeComplete)="setBackground($event)"></color-sketch>
         </div>
     </div>
-</div>
+<!-- </div> -->

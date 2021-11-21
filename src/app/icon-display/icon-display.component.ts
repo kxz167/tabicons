@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ColorEvent } from 'ngx-color';
+import { environment } from './../../environments/environment';
 
 // The url length of the icon handler.
 const URL_LENGTH = 13;
@@ -36,6 +37,7 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
 
   noImage($event:Event):void {
     console.warn("modified");
+    console.warn($event);
     this.imageFailed = true;
   }
 
@@ -60,6 +62,20 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getColor(negate:boolean): string{ //If negate is true, it means that we want to return the negative color (if light mode -> dark)
+    if(typeof(this.selectedFillColor) !== 'undefined'){
+      return this.selectedFillColor;
+    }
+    else{
+      if(negate){
+        return !this.inDarkMode() ? "black" : "white"; 
+      }
+      else{
+        return this.inDarkMode() ? "white" : "black";
+      }
+    }
+  }
+
   inDarkMode(): boolean{
     let matchList: MediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
     return matchList.matches; //We have a match for prefering color scheme of dark
@@ -71,6 +87,7 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
     if(this.oldIcon != null && this.onAfterSVGSourced){   //Do not run when setting data source
       // Get the SVG Element inside of the object
       let svgObject = this.svgObjectView.nativeElement.contentDocument.children[0];
+      console.warn(svgObject);
 
       //Create the styling element 
       let styleEntry = this.renderer.createText(":nth-child(2) { fill: " + (color != undefined ? color : this.fillColor()) + "; }");
@@ -87,6 +104,9 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
       //Send the data in string format to the favicon.
       this.oldIcon.href = "data:image/svg+xml," + (new XMLSerializer().serializeToString(svgObject));
     }
+    else{
+      console.warn("Fail");
+    }
   }
 
   updateUrl(){
@@ -99,9 +119,11 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
     this.route.queryParams.subscribe(params => {
       console.warn("parse");
       console.warn(params);
-      this.selectedFillColor = params['color'];
-      this.stringRgbVal = this.selectedFillColor;
-    })
+      if(!(params && Object.keys(params).length === 0)){
+        this.selectedFillColor = params['color'];
+        this.stringRgbVal = this.selectedFillColor;
+      }
+    });
 
     // console.warn("Init");
     // Find the url that the user "searched" for.
@@ -115,20 +137,25 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
     console.warn(matches);
     // this.searchUrl = this.router.url.slice(URL_LENGTH);
     this.iconUri = "/assets/icons" + this.searchUrl + this.imageSelector;
+    console.warn(this.iconUri);
   }
 
   ngAfterViewInit(){
     if(this.oldIcon != null){
       //Set the svgobject data
-      this.renderer.listen(this.svgObjectView.nativeElement, "error_event", ($event => {
-        console.warn("Errors");
-        this.imageFailed = true;
-      }));
-      this.renderer.setAttribute(this.svgObjectView.nativeElement, "data", this.iconUri);
+      // this.renderer.listen(this.svgObjectView.nativeElement, "error_event", ($event => {
+      //   console.warn("Errors");
+      //   this.imageFailed = true;
+      // }));
+      this.renderer.setAttribute(this.svgObjectView.nativeElement, "data", environment.apiUrl + this.iconUri);
+      // this.renderer.setAttribute(this.svgObjectView.nativeElement, "data", this.iconUri);
       this.onAfterSVGSourced = true;  //Enable next SVG callback
 
       //Change svg background so the image preview works:
       this.renderer.addClass(this.svgObjectContainer.nativeElement, (this.inDarkMode() ? "dark" : "light")); 
+    }
+    else{
+      console.warn("Failed icon");
     }
   }
 
