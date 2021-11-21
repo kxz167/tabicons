@@ -23,15 +23,16 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
 
 
   //Styling
-  fillColor!: string;
+  fillColor: string = "red";
 
   constructor(
     private router: Router,
     private renderer: Renderer2
   ) { }
 
+  //Callback once the svg object gets loaded
   svgLoaded(){
-    if(this.onAfterSVGSourced){
+    if(this.onAfterSVGSourced){   //Do not run when setting data source
       console.warn("Loaded");
       let styleElement = this.renderer.createElement("style", "http://www.w3.org/2000/svg");
       let styleEntry = this.renderer.createText(":nth-child(2) { fill: " + this.fillColor + "; }");
@@ -42,11 +43,17 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
       let svgObjectViewNE = this.svgObjectView.nativeElement;
       let svgObject = svgObjectViewNE.contentDocument.children[0];
       console.warn(svgObject);
+
+      this.renderer.appendChild(svgObject, styleElement);
+      if(this.oldIcon != null){
+        this.oldIcon.href = "data:image/svg+xml," + (new XMLSerializer().serializeToString(svgObject));
+      }
+
     }
   }
 
   ngOnInit(): void {
-    console.warn("init");
+    console.warn("Init");
     // Find the url that the user "searched" for.
     this.iconUrl = this.router.url.slice(URL_LENGTH);
     this.iconUri = "/assets/icons" + this.iconUrl + this.imageSelector;
@@ -60,18 +67,11 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    
     if(this.oldIcon != null){
-      // Set the link to the url.
-      // this.oldIcon.href = "/assets/icons" + this.iconUrl + this.imageSelector;
+      //Set the svgobject data
       this.renderer.setAttribute(this.svgObjectView.nativeElement, "data", this.iconUri);
-      this.onAfterSVGSourced = true;
-      //Create the svg style:
-      
+      this.onAfterSVGSourced = true;  //Enable next SVG callback
     }
-    console.warn("view initiailized");
-    console.warn(this.svgImageView);
-    console.warn(this.svgObjectView);
   }
 
 }
