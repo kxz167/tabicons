@@ -12,58 +12,59 @@ const URL_LENGTH = 13;
 export class IconDisplayComponent implements OnInit, AfterViewInit {
 
   onAfterSVGSourced: boolean = false;
-
-  @ViewChild("svgImage") svgImageView!: ElementRef;
+  @ViewChild("svgObjectContainer") svgObjectContainer!: ElementRef;
   @ViewChild("svgObject") svgObjectView!: ElementRef;
 
-  iconUrl!: string;   //The icon url given by user
+  searchUrl!: string;   //The icon url given by user
   iconUri!: string;   //The icon asset path
   oldIcon: HTMLLinkElement | null = document.querySelector('#tab-favicon');
   imageSelector: string = "/materialicons/24px.svg";
 
 
   //Styling
-  fillColor: string = "red";
-
+  selectedFillColor!: string;
   constructor(
     private router: Router,
     private renderer: Renderer2
   ) { }
 
+  fillColor(): string{
+    if(typeof(this.selectedFillColor) !== 'undefined'){
+      return this.selectedFillColor;
+    }
+    else{
+      return this.inDarkMode() ? "white" : "black"; 
+    }
+  }
+
+  inDarkMode(): boolean{
+    let matchList: MediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
+    return matchList.matches; //We have a match for prefering color scheme of dark
+  }
+
   //Callback once the svg object gets loaded
-  svgLoaded(){
-    if(this.onAfterSVGSourced){   //Do not run when setting data source
-      console.warn("Loaded");
+  setSvgStyle(): void{
+    console.warn("Loaded");
+    if(this.oldIcon != null && this.onAfterSVGSourced){   //Do not run when setting data source
+      // Get the SVG Element inside of the object
+      let svgObject = this.svgObjectView.nativeElement.contentDocument.children[0];
+
+      //Create the styling element 
       let styleElement = this.renderer.createElement("style", "http://www.w3.org/2000/svg");
-      let styleEntry = this.renderer.createText(":nth-child(2) { fill: " + this.fillColor + "; }");
-      console.warn(styleElement);
-      console.warn(styleEntry);
-  
-      this.renderer.appendChild(styleElement, styleEntry);
-      let svgObjectViewNE = this.svgObjectView.nativeElement;
-      let svgObject = svgObjectViewNE.contentDocument.children[0];
-      console.warn(svgObject);
+      let styleEntry = this.renderer.createText(":nth-child(2) { fill: " + this.fillColor() + "; }");
+      this.renderer.appendChild(styleElement, styleEntry);  // insert style entry into style
+      this.renderer.appendChild(svgObject, styleElement);   // insert style into svg object
 
-      this.renderer.appendChild(svgObject, styleElement);
-      if(this.oldIcon != null){
-        this.oldIcon.href = "data:image/svg+xml," + (new XMLSerializer().serializeToString(svgObject));
-      }
-
+      //Send the data in string format to the favicon.
+      this.oldIcon.href = "data:image/svg+xml," + (new XMLSerializer().serializeToString(svgObject));
     }
   }
 
   ngOnInit(): void {
     console.warn("Init");
     // Find the url that the user "searched" for.
-    this.iconUrl = this.router.url.slice(URL_LENGTH);
-    this.iconUri = "/assets/icons" + this.iconUrl + this.imageSelector;
-
-    // If the old icon exists:
-    // if(this.oldIcon != null){
-    //   // Set the link to the url.
-    //   // this.oldIcon.href = "/assets/icons" + this.iconUrl + this.imageSelector;
-    //   this.renderer.setAttribute(this.svgObjectView.nativeElement, "data", this.iconUri);
-    // }
+    this.searchUrl = this.router.url.slice(URL_LENGTH);
+    this.iconUri = "/assets/icons" + this.searchUrl + this.imageSelector;
   }
 
   ngAfterViewInit(){
@@ -71,6 +72,9 @@ export class IconDisplayComponent implements OnInit, AfterViewInit {
       //Set the svgobject data
       this.renderer.setAttribute(this.svgObjectView.nativeElement, "data", this.iconUri);
       this.onAfterSVGSourced = true;  //Enable next SVG callback
+
+      //Change svg background so the image preview works:
+      this.renderer.setStyle(this.svgObjectContainer.nativeElement, "background",(this.inDarkMode() ? "black" : "white")); 
     }
   }
 
