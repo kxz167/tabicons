@@ -11,8 +11,9 @@ const URL_LENGTH = 13;
 })
 export class IconDisplayComponent implements OnInit {
 
-  let iconUrl: string;
-  let oldIcon: HTMLLinkElement = document.querySelector('#favicon');
+  iconUrl: string | undefined;
+  oldIcon: HTMLLinkElement | null = document.querySelector('#tab-favicon');
+  imageSelector: string = "/materialicons/24px.svg";
 
   constructor(
     private router: Router
@@ -20,9 +21,15 @@ export class IconDisplayComponent implements OnInit {
 
 
   ngOnInit(): void {
-    iconUrl = this.router.url.slice(URL_LENGTH);
-    console.warn(iconUrl);
-    this.oldIcon.data = "/assets/icons" + iconUrl;
+    this.iconUrl = this.router.url.slice(URL_LENGTH);
+    console.warn(this.iconUrl);
+
+    // If the old icon exists:
+    if(this.oldIcon != null){
+      // Set the link to the url.
+      console.warn(this.oldIcon);
+      this.oldIcon.href = "/assets/icons" + this.iconUrl + this.imageSelector;
+    }
   }
 
 }
